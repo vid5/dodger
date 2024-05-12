@@ -46,7 +46,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         //player = new Player(playerImage, screenWidth/2-100, screenHeight/2-100, 100);
         player = new Player(getContext(), screenWidth/2, screenHeight - screenHeight/6, 100);
 
-        levels.add(new Level(1, 30));
+        levels.add(new Level(1, 20));
 
 
         setFocusable(true);
@@ -224,7 +224,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     //Bullet functions
-    public void bulletCircle(double x, double y, double speed, int radius, int amount, double offset) {
+    public void bulletCircle(double x, double y, double speed, int radius, double offset, int amount) {
         double degrees;
         for(int i = 0; i < amount; i++) {
             degrees = (360/(double)amount)*i + offset;
@@ -247,6 +247,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         bullets.add(new CircleBullet(getContext(), x, y, degrees, speed, radius));
     }
 
+    public void bullet(double x, double y, double speed, int radius, double degrees) {
+        bullets.add(new CircleBullet(getContext(), x, y, degrees, speed, radius));
+    }
+
     //Levels
     public void level1(int update) {
         // 60 updates = 1 second
@@ -264,6 +268,39 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             case 400:
                 aimedBulletCircle(screenWidth/2, screenHeight/6, 5, 50, 20, 12);
                 aimedBullet(screenWidth/2, screenHeight/6, 6, 60, 0);
+                break;
+            case 500:
+            case 600:
+            case 700:
+                bullet(0, 0, 8, 120, 0);
+                bullet(screenWidth/4, 0, 8, 120, 0);
+                bullet(screenWidth - screenWidth/4, 0, 8, 120, 0);
+                bullet(screenWidth, 0, 8, 120, 0);
+                break;
+            case 550:
+                bullet(0, 0, 8, 120, 0);
+                bullet(screenWidth/4, 0, 8, 120, 0);
+                bullet(screenWidth/2, 0, 8, 120, 0);
+                bullet(screenWidth, 0, 8, 120, 0);
+                break;
+            case 650:
+                bullet(0, 0, 8, 120, 0);
+                bullet(screenWidth/2, 0, 8, 120, 0);
+                bullet(screenWidth - screenWidth/4, 0, 8, 120, 0);
+                bullet(screenWidth, 0, 8, 120, 0);
+                break;
+            case 401:
+            case 451:
+            case 501:
+            case 551:
+            case 601:
+            case 651:
+            case 701:
+                aimedBulletCircle(screenWidth/2, screenHeight/6, 5, 10, 30, 16);
+                break;
+            case 800:
+                bulletCircle(screenWidth/2, screenHeight/6, 5, 100, 0, 32);
+                aimedBulletCircle(screenWidth/2, screenHeight/6, 6, 50, 30, 24);
                 break;
         }
     }

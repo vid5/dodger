@@ -11,7 +11,9 @@ import androidx.core.content.ContextCompat;
 public class Player{
     private ImageView image;
     private Paint paint;
+    private Paint hitboxPaint;
     private int color;
+    private int hitboxColor;
     private int x;
     private int y;
     private int radius;
@@ -34,8 +36,11 @@ public class Player{
         this.radius = radius;
 
         paint = new Paint();
+        hitboxPaint = new Paint();
         color = ContextCompat.getColor(context, R.color.white);
+        hitboxColor = ContextCompat.getColor(context, R.color.green);
         paint.setColor(color);
+        hitboxPaint.setColor(hitboxColor);
     }
 
     public ImageView getImage() {
@@ -77,6 +82,7 @@ public class Player{
     public void draw(Canvas canvas) {
         paint.setColor(color);
         canvas.drawCircle((float)x, (float)y, radius, paint);
+        canvas.drawCircle((float)x, (float)y, radius/3, hitboxPaint);
     }
 
     public void update() {
