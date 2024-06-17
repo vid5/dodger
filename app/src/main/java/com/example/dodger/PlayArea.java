@@ -3,6 +3,7 @@ package com.example.dodger;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -15,8 +16,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-public class PlayArea extends AppCompatActivity {
-
+public class PlayArea extends Activity {
+    private Game game;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +29,24 @@ public class PlayArea extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
 
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
         // sets content view to game class
-        setContentView(new Game(this));
+        game = new Game(this);
+        setContentView(game);
+    }
+
+    @Override
+    protected void onPause() {
+        game.pause();
+        super.onPause();
+    }
+
+    @Override
+    public void onBackPressed() {
+        //disabled back button
     }
 }

@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import androidx.core.content.ContextCompat;
 
 public class Player{
-    private ImageView image;
     private Paint paint;
     private Paint hitboxPaint;
     private int color;
@@ -17,23 +16,16 @@ public class Player{
     private int x;
     private int y;
     private int radius;
+    private Color state;
+    private Sprite[] spriteArray;
+    private Game game;
 
-    public Player(ImageView image, int x, int y, int radius) {
-        this.image = image;
+    public Player(Context context, int x, int y, int radius, Sprite[] spriteArray, Game game) {
         this.x = x;
         this.y = y;
         this.radius = radius;
-
-        this.image.setX(this.x);
-        this.image.setY(this.y);
-        this.image.getLayoutParams().height = this.radius*2;
-        this.image.getLayoutParams().width = this.radius*2;
-    }
-
-    public Player(Context context, int x, int y, int radius) {
-        this.x = x;
-        this.y = y;
-        this.radius = radius;
+        this.spriteArray = spriteArray;
+        this.game = game;
 
         paint = new Paint();
         hitboxPaint = new Paint();
@@ -41,14 +33,8 @@ public class Player{
         hitboxColor = ContextCompat.getColor(context, R.color.green);
         paint.setColor(color);
         hitboxPaint.setColor(hitboxColor);
-    }
 
-    public ImageView getImage() {
-        return image;
-    }
-
-    public void setImage(ImageView image) {
-        this.image = image;
+        state = Color.RED;
     }
 
     public int getX() {
@@ -69,7 +55,7 @@ public class Player{
         //this.image.setY(this.y);
     }
 
-    public int getRadius() {
+        public int getRadius() {
         return radius;
     }
 
@@ -81,20 +67,37 @@ public class Player{
 
     public void draw(Canvas canvas) {
         paint.setColor(color);
-        canvas.drawCircle((float)x, (float)y, radius, paint);
-        canvas.drawCircle((float)x, (float)y, radius/3, hitboxPaint);
+        int offset = 0;
+        if (state == Color.BLUE)
+            offset = 4;
+        else
+            offset = 0;
+        if(game.getInvincible() == false) {
+            spriteArray[game.getNumberOfUpdates() / 3 % 4 + offset].draw(canvas, (int) x - radius, (int) y - radius, radius);
+            canvas.drawCircle((float) x, (float) y, radius / 5, hitboxPaint);
+        }
+        else if(game.getNumberOfUpdates()%8 >= 4) {
+            spriteArray[game.getNumberOfUpdates() / 3 % 4 + offset].draw(canvas, (int) x - radius, (int) y - radius, radius);
+            canvas.drawCircle((float) x, (float) y, radius / 5, hitboxPaint);
+        }
     }
 
     public void update() {
 
     }
 
-    public void invincibility(Context context, boolean b) {
-        if (b) {
+    public void switchState(Context context) {
+        if (state == Color.RED) {
+            state = Color.BLUE;
             color = ContextCompat.getColor(context, R.color.blue);
         }
         else {
-            color = ContextCompat.getColor(context, R.color.white);
+            state = Color.RED;
+            color = ContextCompat.getColor(context, R.color.red);
         }
+    }
+
+    public Color getState() {
+        return this.state;
     }
 }
